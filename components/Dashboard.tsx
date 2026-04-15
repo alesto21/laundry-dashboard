@@ -43,30 +43,37 @@ export default function Dashboard({
 
   const bump = () => setRefreshKey((k) => k + 1);
 
+  const locale = lang === "sr" ? "sr-RS" : lang === "no" ? "nb-NO" : "en-GB";
   const dateLabel = now
-    ? now.toLocaleDateString(lang === "sr" ? "sr-RS" : lang === "no" ? "nb-NO" : "en-GB", {
-        weekday: "long",
-        month: "long",
-        day: "numeric",
-      })
+    ? now.toLocaleDateString(locale, { weekday: "long", month: "long", day: "numeric" })
     : "";
 
   return (
-    <main className="min-h-screen p-5 md:p-10">
-      <div className="mx-auto max-w-6xl">
-        <header className="mb-8 flex items-start justify-between gap-4">
-          <div>
-            <p className="text-slate-500 text-lg font-medium capitalize mb-1">{dateLabel}</p>
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tight bg-gradient-to-br from-slate-900 to-slate-600 bg-clip-text text-transparent">
+    <main
+      className="min-h-screen"
+      style={{
+        paddingTop: "env(safe-area-inset-top)",
+        paddingBottom: "env(safe-area-inset-bottom)",
+      }}
+    >
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 md:px-10 py-5 sm:py-8 md:py-10">
+        <header className="mb-6 sm:mb-8 flex items-start justify-between gap-3">
+          <div className="min-w-0 flex-1">
+            <p className="text-slate-500 text-sm sm:text-base md:text-lg font-medium capitalize mb-0.5 sm:mb-1 truncate">
+              {dateLabel}
+            </p>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight bg-gradient-to-br from-slate-900 to-slate-600 bg-clip-text text-transparent truncate">
               {now ? greeting(lang, now) : tr("title", lang)}
             </h1>
           </div>
-          <LangSwitcher value={lang} onChange={setLang} />
+          <div className="shrink-0">
+            <LangSwitcher value={lang} onChange={setLang} />
+          </div>
         </header>
 
         <StatusBar initial={status} lang={lang} />
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 md:gap-5 mb-3 sm:mb-4 md:mb-5">
           <NotifyTile
             kind="laundry"
             title={tr("laundry_ready", lang)}
@@ -87,7 +94,7 @@ export default function Dashboard({
           />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 md:gap-5">
           <ShoppingList initial={shopping} lang={lang} showOpenLink />
           <ActivityLog initial={logs} refreshKey={refreshKey} lang={lang} />
         </div>

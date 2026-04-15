@@ -28,25 +28,30 @@ export default function MemberButton({
       type="button"
       onClick={onToggle}
       className={[
-        "group flex flex-col items-center gap-2 p-3 rounded-3xl transition-all",
-        "active:scale-95",
-        selected
-          ? "bg-white shadow-card ring-2 " + c.ring
-          : "hover:bg-white/60",
+        "group flex flex-col items-center gap-1.5 sm:gap-2 p-1.5 sm:p-3 rounded-2xl sm:rounded-3xl",
+        "transition-all active:scale-95",
+        selected ? "bg-white shadow-card ring-2 " + c.ring : "hover:bg-white/60",
       ].join(" ")}
     >
       <div
         className={[
-          "w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center",
-          "text-4xl md:text-5xl font-bold transition-all",
+          "rounded-full flex items-center justify-center font-bold transition-all",
+          "w-14 h-14 sm:w-20 sm:h-20 md:w-24 md:h-24",
+          "text-2xl sm:text-4xl md:text-5xl",
           selected
             ? `${c.selBg} text-white shadow-lg`
-            : `${c.bg} ${c.text} ring-4 ${c.ringSoft}`,
+            : `${c.bg} ${c.text} ring-2 sm:ring-4 ${c.ringSoft}`,
         ].join(" ")}
       >
         {selected ? "✓" : initial}
       </div>
-      <span className={`text-lg md:text-xl font-semibold ${selected ? c.text : "text-slate-700"}`}>
+      <span
+        className={[
+          "font-semibold truncate max-w-full",
+          "text-xs sm:text-lg md:text-xl",
+          selected ? c.text : "text-slate-700",
+        ].join(" ")}
+      >
         {name}
       </span>
     </button>

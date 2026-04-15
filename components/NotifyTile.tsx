@@ -80,21 +80,21 @@ export default function NotifyTile({
   const allOn = selected.size === members.length && members.length > 0;
 
   return (
-    <section className="rounded-4xl bg-white/70 backdrop-blur-xl border border-white/60 p-6 md:p-8 shadow-soft">
-      <header className="flex items-center justify-between mb-5">
-        <div className="flex items-center gap-3">
-          <div className="text-4xl">{icon}</div>
-          <h2 className="text-2xl md:text-3xl font-bold tracking-tight">{title}</h2>
+    <section className="rounded-3xl sm:rounded-4xl bg-white/70 backdrop-blur-xl border border-white/60 p-4 sm:p-6 md:p-8 shadow-soft">
+      <header className="flex items-center justify-between mb-4 sm:mb-5">
+        <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+          <div className="text-3xl sm:text-4xl">{icon}</div>
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight truncate">{title}</h2>
         </div>
         <button
           onClick={selectAll}
-          className="text-base font-semibold text-slate-500 px-4 py-2 rounded-full hover:bg-slate-100"
+          className="text-sm sm:text-base font-semibold text-slate-500 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full hover:bg-slate-100 shrink-0"
         >
           {allOn ? tr("clear", lang) : tr("all", lang)}
         </button>
       </header>
 
-      <div className="grid grid-cols-5 gap-1 mb-6">
+      <div className="grid grid-cols-5 gap-0.5 sm:gap-1 mb-5 sm:mb-6">
         {members.map((m) => (
           <MemberButton
             key={m.id}
@@ -106,11 +106,11 @@ export default function NotifyTile({
         ))}
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-2 sm:gap-3">
         <button
           onClick={() => notify(false)}
           disabled={selected.size === 0 || sending}
-          className={`h-16 rounded-2xl text-lg font-semibold text-white shadow-lg ${primary}
+          className={`h-14 sm:h-16 rounded-xl sm:rounded-2xl text-base sm:text-lg font-semibold text-white shadow-lg ${primary}
             disabled:bg-none disabled:bg-slate-200 disabled:text-slate-400 disabled:shadow-none
             active:scale-[0.98] transition-all`}
         >
@@ -119,7 +119,7 @@ export default function NotifyTile({
         <button
           onClick={() => notify(true)}
           disabled={sending}
-          className="h-16 rounded-2xl text-lg font-semibold bg-slate-900 text-white shadow-lg
+          className="h-14 sm:h-16 rounded-xl sm:rounded-2xl text-base sm:text-lg font-semibold bg-slate-900 text-white shadow-lg
             disabled:bg-slate-200 disabled:text-slate-400 disabled:shadow-none
             active:scale-[0.98] transition-all"
         >
@@ -127,14 +127,14 @@ export default function NotifyTile({
         </button>
       </div>
 
-      <div className="mt-4 min-h-[1.75rem]" aria-live="polite">
+      <div className="mt-3 sm:mt-4 min-h-[1.75rem]" aria-live="polite">
         {status.kind === "success" && (
-          <p className="text-green-700 font-semibold text-lg">
+          <p className="text-green-700 font-semibold text-base sm:text-lg">
             ✓ {tr("sent_to", lang)} {formatNames(status.names)}
           </p>
         )}
         {status.kind === "error" && (
-          <p className="text-red-700 font-semibold">✗ {status.message}</p>
+          <p className="text-red-700 font-semibold text-sm sm:text-base">✗ {status.message}</p>
         )}
       </div>
     </section>

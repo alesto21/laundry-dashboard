@@ -41,27 +41,31 @@ export default function ActivityLog({
   }, [refreshKey]);
 
   return (
-    <section className="rounded-4xl bg-white/70 backdrop-blur-xl border border-white/60 p-6 md:p-8 shadow-soft">
-      <header className="flex items-center gap-3 mb-5">
-        <div className="text-4xl">🕒</div>
-        <h2 className="text-2xl md:text-3xl font-bold tracking-tight">{tr("recent_activity", lang)}</h2>
+    <section className="rounded-3xl sm:rounded-4xl bg-white/70 backdrop-blur-xl border border-white/60 p-4 sm:p-6 md:p-8 shadow-soft">
+      <header className="flex items-center gap-2.5 sm:gap-3 mb-4 sm:mb-5">
+        <div className="text-3xl sm:text-4xl">🕒</div>
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight">
+          {tr("recent_activity", lang)}
+        </h2>
       </header>
 
       {logs.length === 0 ? (
-        <p className="text-slate-400 text-lg py-4">{tr("no_activity", lang)}</p>
+        <p className="text-slate-400 text-base sm:text-lg py-4">{tr("no_activity", lang)}</p>
       ) : (
         <ul className="divide-y divide-slate-100">
           {logs.map((log) => (
-            <li key={log.id} className="py-4 flex items-start gap-4">
-              <span className="text-3xl mt-0.5">{ICONS[log.kind] ?? "🔔"}</span>
+            <li key={log.id} className="py-3 sm:py-4 flex items-start gap-3 sm:gap-4">
+              <span className="text-2xl sm:text-3xl mt-0.5">{ICONS[log.kind] ?? "🔔"}</span>
               <div className="flex-1 min-w-0">
-                <div className="text-sm text-slate-500 mb-1.5">{formatDate(log.createdAt)}</div>
-                <div className="flex flex-wrap gap-1.5">
+                <div className="text-xs sm:text-sm text-slate-500 mb-1 sm:mb-1.5">
+                  {formatDate(log.createdAt)}
+                </div>
+                <div className="flex flex-wrap gap-1 sm:gap-1.5">
                   {log.recipients.map((r, i) => (
                     <span
                       key={i}
                       className={[
-                        "px-3 py-1 rounded-full text-sm font-medium",
+                        "px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs sm:text-sm font-medium",
                         r.acknowledged
                           ? "bg-emerald-100 text-emerald-800"
                           : "bg-amber-100 text-amber-800",
