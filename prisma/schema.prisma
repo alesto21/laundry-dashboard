@@ -1,0 +1,50 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Member {
+  id         Int                     @id @default(autoincrement())
+  name       String
+  fullName   String?
+  email      String
+  hostname   String?
+  language   String                  @default("en")
+  color      String                  @default("slate")
+  deliveries NotificationDelivery[]
+}
+
+model NotificationLog {
+  id         Int                     @id @default(autoincrement())
+  createdAt  DateTime                @default(now())
+  kind       String                  @default("laundry")
+  recipients String
+  deliveries NotificationDelivery[]
+}
+
+model NotificationDelivery {
+  id             Int              @id @default(autoincrement())
+  logId          Int
+  log            NotificationLog  @relation(fields: [logId], references: [id], onDelete: Cascade)
+  memberId       Int
+  member         Member           @relation(fields: [memberId], references: [id])
+  token          String           @unique
+  acknowledgedAt DateTime?
+}
+
+model ShoppingItem {
+  id          Int       @id @default(autoincrement())
+  text        String
+  createdAt   DateTime  @default(now())
+  completedAt DateTime?
+}
+
+model TrashPickup {
+  id   Int      @id @default(autoincrement())
+  date DateTime
+  kind String
+}
