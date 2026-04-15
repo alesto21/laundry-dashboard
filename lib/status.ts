@@ -17,6 +17,12 @@ function pingHost(host: string): Promise<boolean> {
   });
 }
 
+async function anyHome(hostnames: string): Promise<boolean> {
+  const hosts = hostnames.split(",").map((h) => h.trim()).filter(Boolean);
+  const results = await Promise.all(hosts.map(pingHost));
+  return results.some(Boolean);
+}
+
 export async function whoIsHome() {
   const members = await prisma.member.findMany({ orderBy: { id: "asc" } });
   return Promise.all(
@@ -24,7 +30,7 @@ export async function whoIsHome() {
       id: m.id,
       name: m.name,
       color: m.color,
-      home: m.hostname ? await pingHost(m.hostname) : null,
+      home: m.hostname ? await anyHome(m.hostname) : null,
     })),
   );
 }
