@@ -2,16 +2,25 @@
 
 import { useEffect, useRef, useState } from "react";
 import LangSwitcher from "./LangSwitcher";
+import ShareSheet from "./ShareSheet";
 import { Lang, tr } from "@/lib/i18n";
 
 type Item = { id: number; text: string; completedAt: string | null };
+type Member = { id: number; name: string; color: string };
 
-export default function ShoppingPage({ initial }: { initial: Item[] }) {
+export default function ShoppingPage({
+  initial,
+  members,
+}: {
+  initial: Item[];
+  members: Member[];
+}) {
   const [lang, setLang] = useState<Lang>("sr");
   const [items, setItems] = useState<Item[]>(initial);
   const [text, setText] = useState("");
   const [busy, setBusy] = useState(false);
   const [justAdded, setJustAdded] = useState<number | null>(null);
+  const [shareOpen, setShareOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -88,6 +97,8 @@ export default function ShoppingPage({ initial }: { initial: Item[] }) {
       ? tr("items_one", lang)
       : tr("items_many", lang, { n: active.length });
 
+  const listText = active.map((i) => `• ${i.text}`).join("\n");
+
   return (
     <main
       className="min-h-screen flex flex-col"
@@ -107,7 +118,18 @@ export default function ShoppingPage({ initial }: { initial: Item[] }) {
               <p className="text-xs text-slate-500 -mt-0.5">{countLabel}</p>
             </div>
           </a>
-          <LangSwitcher value={lang} onChange={setLang} />
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setShareOpen(true)}
+              disabled={active.length === 0}
+              className="h-10 w-10 rounded-full bg-white/80 border border-slate-200 hover:bg-white flex items-center justify-center text-xl shadow-sm disabled:opacity-40 disabled:cursor-not-allowed transition"
+              aria-label={tr("share", lang)}
+              title={tr("share", lang)}
+            >
+              📤
+            </button>
+            <LangSwitcher value={lang} onChange={setLang} />
+          </div>
         </div>
       </header>
 
@@ -217,6 +239,15 @@ export default function ShoppingPage({ initial }: { initial: Item[] }) {
           </>
         )}
       </div>
+
+      <ShareSheet
+        open={shareOpen}
+        onClose={() => setShareOpen(false)}
+        lang={lang}
+        listText={listText}
+        title={tr("shopping", lang)}
+        members={members}
+      />
 
       <style jsx>{`
         @keyframes slide-in {

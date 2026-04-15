@@ -39,6 +39,13 @@ export const t: Dict = {
   items_one:        { en: "1 item",                 no: "1 vare",                sr: "1 stavka" },
   items_many:       { en: "{n} items",              no: "{n} varer",             sr: "{n} stavki" },
 
+  share:            { en: "Share",                  no: "Del",                   sr: "Podeli" },
+  share_to_device:  { en: "Share to this device",   no: "Del til denne enheten", sr: "Podeli na ovaj uređaj" },
+  email_to:         { en: "Email to",                no: "Send på e-post til",    sr: "Pošalji na email za" },
+  cancel:           { en: "Cancel",                 no: "Avbryt",                sr: "Otkaži" },
+  copied:           { en: "Copied to clipboard",    no: "Kopiert",               sr: "Kopirano" },
+  sent:             { en: "Sent",                    no: "Sendt",                 sr: "Poslato" },
+
   recent_activity:  { en: "Recent activity",       no: "Nylig aktivitet",       sr: "Nedavne aktivnosti" },
   no_activity:      { en: "No notifications yet.", no: "Ingen varsler enda.",   sr: "Još nema obaveštenja." },
   picked_up:        { en: "Picked up",             no: "Hentet",                sr: "Podignuto" },

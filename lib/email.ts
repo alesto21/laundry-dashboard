@@ -171,6 +171,95 @@ function buildMessage(kind: Kind, d: Delivery) {
   return { subject, text, html };
 }
 
+const SHOPPING_COPY: Record<Lang, { subject: string; intro: string; signoff: string }> = {
+  en: {
+    subject: "🛒 Shopping list",
+    intro: "Here's the shopping list from the Home Dashboard:",
+    signoff: "Tip: long-press the list below → Add to Notes",
+  },
+  no: {
+    subject: "🛒 Handleliste",
+    intro: "Her er handlelisten fra Hjem-tavlen:",
+    signoff: "Tips: hold fingeren på listen under → Legg til i Notater",
+  },
+  sr: {
+    subject: "🛒 Spisak za kupovinu",
+    intro: "Evo spiska za kupovinu iz kućne table:",
+    signoff: "Savet: drži prst na listi ispod → Dodaj u Beleške",
+  },
+};
+
+export async function sendShoppingList(
+  recipient: { name: string; email: string; language: string },
+  items: string[],
+) {
+  if (items.length === 0) throw new Error("Shopping list is empty");
+
+  const lang = pickLang(recipient.language);
+  const c = SHOPPING_COPY[lang];
+  const listText = items.map((i) => `• ${i}`).join("\n");
+  const listHtml = items
+    .map((i) => `<li style="padding:10px 0;font-size:18px;color:#0f172a;border-bottom:1px solid #f1f5f9">${i}</li>`)
+    .join("");
+
+  const subject = c.subject;
+  const text = `${c.intro}\n\n${listText}\n\n${c.signoff}\n`;
+  const html = `<!DOCTYPE html>
+<html><body style="margin:0;padding:0;background:#faf8f3;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="padding:24px 12px">
+    <tr><td align="center">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background:#fff;border-radius:28px;overflow:hidden;box-shadow:0 10px 40px rgba(15,23,42,0.08)">
+        <tr><td style="background:linear-gradient(135deg,#60a5fa,#2563eb);padding:40px;text-align:center">
+          <div style="font-size:64px;line-height:1">🛒</div>
+        </td></tr>
+        <tr><td style="padding:32px">
+          <h1 style="margin:0 0 8px;font-size:24px;color:#0f172a">${subject}</h1>
+          <p style="margin:0 0 20px;font-size:16px;color:#475569">${c.intro}</p>
+          <ul style="margin:0;padding:0;list-style:none">${listHtml}</ul>
+          <p style="margin:24px 0 0;font-size:13px;color:#94a3b8;font-style:italic">${c.signoff}</p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body></html>`;
+
+  if (process.env.RESEND_API_KEY) {
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: process.env.MAIL_FROM ?? "Home <onboarding@resend.dev>",
+        to: [recipient.email],
+        subject,
+        text,
+        html,
+      }),
+    });
+    if (!res.ok) throw new Error(`Resend failed: ${res.status} ${await res.text()}`);
+    return;
+  }
+
+  if (!process.env.SMTP_HOST) throw new Error("No email provider configured.");
+
+  const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: Number(process.env.SMTP_PORT ?? 465),
+    secure: String(process.env.SMTP_SECURE ?? "true") === "true",
+    auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
+  });
+
+  await transporter.sendMail({
+    from: process.env.MAIL_FROM ?? process.env.SMTP_USER,
+    to: `${recipient.name} <${recipient.email}>`,
+    subject,
+    text,
+    html,
+  });
+}
+
 export async function sendNotifications(kind: Kind, deliveries: Delivery[]) {
   if (deliveries.length === 0) throw new Error("No recipients selected");
 
