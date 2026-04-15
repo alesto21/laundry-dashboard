@@ -35,6 +35,9 @@ export const t: Dict = {
   add:              { en: "Add",                   no: "Legg til",              sr: "Dodaj" },
   empty_list:       { en: "Nothing yet — add what you need.", no: "Ingenting enda — legg til noe.", sr: "Nema ničega — dodaj šta treba." },
   done:             { en: "Done",                  no: "Ferdig",                sr: "Gotovo" },
+  items_zero:       { en: "nothing to buy",        no: "ingenting å kjøpe",     sr: "nema stavki" },
+  items_one:        { en: "1 item",                 no: "1 vare",                sr: "1 stavka" },
+  items_many:       { en: "{n} items",              no: "{n} varer",             sr: "{n} stavki" },
 
   recent_activity:  { en: "Recent activity",       no: "Nylig aktivitet",       sr: "Nedavne aktivnosti" },
   no_activity:      { en: "No notifications yet.", no: "Ingen varsler enda.",   sr: "Još nema obaveštenja." },
