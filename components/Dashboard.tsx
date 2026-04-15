@@ -88,7 +88,7 @@ export default function Dashboard({
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
-          <ShoppingList initial={shopping} lang={lang} />
+          <ShoppingList initial={shopping} lang={lang} showOpenLink />
           <ActivityLog initial={logs} refreshKey={refreshKey} lang={lang} />
         </div>
       </div>
